@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Assets.Scripts.Babies;
+﻿using Assets.Scripts.Babies;
+using UnityEngine;
 
 namespace Assets.Scripts.Nurse
 {
@@ -7,61 +7,129 @@ namespace Assets.Scripts.Nurse
     {
         [Header("Movement")]
         public float moveSpeed = 2f;
-        public float rotationSpeed = 2f;
+        public float rotationSpeed = 8f;
+
+        [Header("Carrying")]
+        public Transform carryPoint;
+        public float pickupRange = 1.5f;
+        public float pickupHeightOffset = 0.8f;
+
+        private bool isCarryingBaby;
+        private Babies.Baby carriedBaby;
 
         private Rigidbody rb;
         private Vector3 moveInput;
         private Camera mainCam;
-
         private Animator animator;
 
         void Start()
         {
             rb = GetComponent<Rigidbody>();
+            animator = GetComponent<Animator>();
             mainCam = Camera.main;
 
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-            animator = GetComponent<Animator>();
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
+
+            if (!carryPoint)
+                Debug.LogError("[NurseController] CarryPoint not assigned!", this);
+
+            Debug.Log("[NurseController] Initialized");
         }
 
         void Update()
         {
             HandleMoveInput();
+            UpdateAnimator();
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                if (carriedBaby == null)
+                    TryPickUpBaby();
+                else
+                    DropBaby();
+            }
 
             if (Input.GetMouseButtonDown(0))
-            {
                 InteractWithBaby();
+        }
+
+        void TryPickUpBaby()
+        {
+            Vector3 center = transform.position + Vector3.up * pickupHeightOffset;
+            Collider[] hits = Physics.OverlapSphere(center, pickupRange);
+
+            foreach (Collider hit in hits)
+            {
+                Babies.Baby baby = hit.GetComponentInParent<Babies.Baby>();
+                if (baby == null)
+                    continue;
+
+                carriedBaby = baby;
+                isCarryingBaby = true;
+
+                Rigidbody babyRb = baby.GetComponent<Rigidbody>();
+                if (babyRb)
+                    babyRb.isKinematic = true;
+
+                Collider babyCollider = baby.GetComponent<Collider>();
+                if (babyCollider)
+                    babyCollider.enabled = false;
+
+                baby.transform.SetParent(carryPoint);
+                baby.transform.localPosition = Vector3.zero;
+                baby.transform.localRotation = Quaternion.identity;
+
+                Debug.Log($"Picked up baby: {baby.babyName}");
+                return;
             }
         }
 
+        void DropBaby()
+        {
+            if (!carriedBaby)
+                return;
+
+            carriedBaby.transform.SetParent(null);
+            carriedBaby.transform.position = transform.position + transform.forward;
+
+            Rigidbody babyRb = carriedBaby.GetComponent<Rigidbody>();
+            if (babyRb)
+                babyRb.isKinematic = false;
+
+            Collider babyCollider = carriedBaby.GetComponent<Collider>();
+            if (babyCollider)
+                babyCollider.enabled = true;
+
+            Debug.Log($"Dropped baby: {carriedBaby.babyName}");
+
+            carriedBaby = null;
+            isCarryingBaby = false;
+        }
+
+
+        // ================= MOVEMENT =================
         void HandleMoveInput()
         {
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
 
-            float speed = new Vector3(h, 0f, v).magnitude;
-            animator.SetFloat("Speed", speed);
-
-            // Camera-relative forward
             Vector3 camForward = mainCam.transform.forward;
-            camForward.y = 0f;
+            camForward.y = 0;
             camForward.Normalize();
 
-            // Character-relative right
-            Vector3 right = transform.right;
-            right.y = 0f;
-            right.Normalize();
+            Vector3 camRight = mainCam.transform.right;
+            camRight.y = 0;
+            camRight.Normalize();
 
-            // Forward follows camera, strafe follows character
-            moveInput = (camForward * v + right * h).normalized;
+            moveInput = (camForward * v + camRight * h).normalized;
+            animator.SetFloat("Speed", moveInput.magnitude);
 
-            // Rotate nurse toward movement direction
             if (moveInput != Vector3.zero)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(moveInput);
+                Quaternion targetRot = Quaternion.LookRotation(moveInput);
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation,
-                    targetRotation,
+                    targetRot,
                     rotationSpeed * Time.deltaTime
                 );
             }
@@ -72,22 +140,40 @@ namespace Assets.Scripts.Nurse
             rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
         }
 
+        // ================= ANIMATOR =================
+        void UpdateAnimator()
+        {
+            int carryLayer = animator.GetLayerIndex("Carry");
+            if (carryLayer >= 0)
+                animator.SetLayerWeight(carryLayer, isCarryingBaby ? 1f : 0f);
+        }
+
+        // ================= INTERACTION =================
         void InteractWithBaby()
         {
             Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                Babies.Baby baby = hit.collider.GetComponent<Babies.Baby>();
-                if (baby != null)
-                {
-                    if (baby.hunger > 50)
-                        baby.Feed();
-                    else
-                        baby.ChangeDiaper();
-                }
-            }
+            if (!Physics.Raycast(ray, out RaycastHit hit, 5f))
+                return;
+
+            Babies.Baby baby = hit.collider.GetComponentInParent<Babies.Baby>();
+            if (!baby)
+                return;
+
+            Debug.Log($"[NurseController] Interacting with {baby.babyName}");
+
+            if (baby.hunger > 50)
+                baby.Feed();
+            else
+                baby.ChangeDiaper();
+        }
+
+        // ================= DEBUG =================
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 center = transform.position + Vector3.up * pickupHeightOffset;
+            Gizmos.DrawWireSphere(center, pickupRange);
         }
     }
 }
