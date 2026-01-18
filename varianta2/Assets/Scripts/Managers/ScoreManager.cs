@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Managers
@@ -7,7 +8,7 @@ namespace Assets.Scripts.Managers
     {
 
         public int score = 0;
-        public Text scoreText;
+        public TextMeshProUGUI scoreText;
 
 
         // Use this for initialization
@@ -22,6 +23,11 @@ namespace Assets.Scripts.Managers
             UpdateUI();
         }
 
+        public void setPoints(int points)
+        {
+            score = points;
+            UpdateUI();
+        }
         public void RemovePoints(int points)
         {
             score -= points;
@@ -30,7 +36,7 @@ namespace Assets.Scripts.Managers
             UpdateUI();
         }
 
-        void UpdateUI()
+        public void UpdateUI()
         {
             if (scoreText != null)
             {

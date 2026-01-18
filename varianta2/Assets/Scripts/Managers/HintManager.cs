@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Assets.Scripts.Managers
 {
     public class HintManager : MonoBehaviour
     {
-        public Text hintText;
+        public TextMeshProUGUI hintText;
         public float hintDUration = 3f;
 
         public void ShowHint(string message)

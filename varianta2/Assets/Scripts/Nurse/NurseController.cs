@@ -62,8 +62,8 @@ namespace Assets.Scripts.Nurse
                     DropBaby();
             }
 
-            if (Input.GetMouseButtonDown(0))
-                InteractWithBaby();
+            //if (Input.GetMouseButtonDown(0))
+            //    InteractWithBaby();
         }
 
         void TryPickUpBaby()

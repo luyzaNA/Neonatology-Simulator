@@ -198,6 +198,7 @@ namespace Assets.Scripts.Managers
         public void AddPoints(int points)
         {
             score += points;
+            ScoreManager.setPoints(points);
             UpdatePlayerUI();
         }
 
@@ -208,6 +209,7 @@ namespace Assets.Scripts.Managers
 
             if (playerScoreText != null)
                 playerScoreText.text = $"Score: {score}";
+
         }
     }
 }

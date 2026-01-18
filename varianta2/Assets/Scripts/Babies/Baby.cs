@@ -44,7 +44,7 @@ namespace Assets.Scripts.Babies
             hunger -= 40;
             confort += 10;
             state = BabyState.Happy;
-            GameManager.Instance.GivePoints(10);
+            //GameManager.Instance.GivePoints(10);
             GameManager.Instance.ShowHint($"{babyName} has been fed and is now happy!");
         }
 
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Babies
         {
             confort += 30;
             state = BabyState.Happy;
-            GameManager.Instance.GivePoints(5);
+            //GameManager.Instance.GivePoints(5);
             GameManager.Instance.ShowHint($"{babyName}'s diaper has been changed and is now comfortable!");
         }
 
