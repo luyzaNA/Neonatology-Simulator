@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using TMPro;
-using System;
+﻿using System;
 using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Assets.Scripts.Managers
 {
@@ -21,10 +22,12 @@ namespace Assets.Scripts.Managers
         [Header("Player Name UI")]
         public TextMeshProUGUI PlayerNameText;
         public GameObject playerNamePanel;
-
+        public TextMeshProUGUI playerScoreText;
 
         [Header("Start game")]
         public GameObject Start_game;
+
+        private int score = 0;
 
         public string PlayerName { get; private set; }
 
@@ -47,6 +50,9 @@ namespace Assets.Scripts.Managers
 
             if (PlayerNameText != null)
                 PlayerNameText.text = PlayerName.ToUpper();
+
+            if (playerScoreText != null)
+                playerScoreText.text = $"Score: {score}";
         }
 
         public void GivePoints(int points)
@@ -79,6 +85,7 @@ namespace Assets.Scripts.Managers
         {
             if (PlayerPrefs.HasKey("SavedName"))
             {
+               // PlayerPrefs.DeleteKey("SavedName");
                 SetPlayerName(PlayerPrefs.GetString("SavedName"));
 
                 if (playerNamePanel != null)
@@ -186,6 +193,21 @@ namespace Assets.Scripts.Managers
         void Update()
         {
 
+        }
+
+        public void AddPoints(int points)
+        {
+            score += points;
+            UpdatePlayerUI();
+        }
+
+        private void UpdatePlayerUI()
+        {
+            if (PlayerNameText != null)
+                PlayerNameText.text = PlayerName.ToUpper();
+
+            if (playerScoreText != null)
+                playerScoreText.text = $"Score: {score}";
         }
     }
 }
