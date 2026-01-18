@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using TMPro;
+using System;
+using System.Collections;
 
 namespace Assets.Scripts.Managers
 {
@@ -8,6 +11,18 @@ namespace Assets.Scripts.Managers
 
         public ScoreManager ScoreManager;
         public HintManager HintManager;
+
+        [Header("Greeting Settings")]
+        public TMP_InputField enterName;
+        public GameObject buttonOK;
+        public TextMeshProUGUI greeting;
+        public GameObject greetingPanel;
+
+        [Header("Player Name UI")]
+        public TextMeshProUGUI PlayerNameText;
+        public GameObject playerNamePanel;
+
+        public string PlayerName { get; private set; }
 
         private void Awake()
         {
@@ -21,10 +36,17 @@ namespace Assets.Scripts.Managers
                 Destroy(gameObject);
             }
         }
+        void SetPlayerName(string name)
+        {
+            PlayerName = name;
+
+            if (PlayerNameText != null)
+                PlayerNameText.text = PlayerName.ToUpper();
+        }
 
         public void GivePoints(int points)
         {
-            if(ScoreManager != null)
+            if (ScoreManager != null)
                 ScoreManager.AddPoints(points);
         }
 
@@ -34,11 +56,121 @@ namespace Assets.Scripts.Managers
                 HintManager.ShowHint(hint);
         }
 
+        void LoadPlayerName()
+        {
+            if (PlayerPrefs.HasKey("SavedName"))
+            {
+                PlayerName = PlayerPrefs.GetString("SavedName");
+                Debug.Log(PlayerName);
+            }
+
+            else
+                PlayerName = "Player";
+
+        }
+
         // Use this for initialization
         void Start()
         {
+            if (PlayerPrefs.HasKey("SavedName"))
+            {
+                SetPlayerName(PlayerPrefs.GetString("SavedName"));
 
+                if (playerNamePanel != null)
+                    playerNamePanel.SetActive(false);
+
+                ShowGreetingOnly();
+                DisplayGreeting(PlayerName);
+
+                StartCoroutine(HideGreetingAfterDelay(5f));
+
+                SetPlayerName(PlayerPrefs.GetString("SavedName"));
+
+                ShowGreetingOnly();
+                DisplayGreeting(PlayerName);
+
+                StartCoroutine(HideGreetingAfterDelay(5f));
+            }
+            else
+            {
+                ShowNameInputOnly();
+
+                Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                enterName.Select();
+                enterName.ActivateInputField();
+            }
         }
+
+
+        private void DisplayGreeting(string name)
+        {
+            if (greeting != null)
+            {
+                int hour = DateTime.Now.Hour;
+                string message;
+
+                if (hour >= 5 && hour < 12)
+                    message = "Buna diminneata";
+                else if (hour >= 12 && hour < 18)
+                    message = "Buna ziua";
+                else
+                    message = "Buna seara ";
+
+                greeting.text = $"{message}, {name}!";
+            }
+        }
+
+        public void ConfirmName()
+        {
+            if (string.IsNullOrWhiteSpace(enterName.text))
+                return;
+
+            SetPlayerName(enterName.text);
+
+            PlayerPrefs.SetString("SavedName", PlayerName);
+            PlayerPrefs.Save();
+
+            DisplayGreeting(PlayerName);
+            ShowGreetingOnly();
+
+            Time.timeScale = 1;
+
+            StartCoroutine(HideGreetingAfterDelay(5f));
+        }
+
+
+        IEnumerator HideGreetingAfterDelay(float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+
+            if (greetingPanel != null)
+                greetingPanel.SetActive(false);
+
+            if (playerNamePanel != null)
+                playerNamePanel.SetActive(true);
+        }
+
+
+        void ShowNameInputOnly()
+        {
+            enterName.gameObject.SetActive(true);
+            buttonOK.SetActive(true);
+            greeting.gameObject.SetActive(false);
+        }
+
+        void ShowGreetingOnly()
+        {
+            enterName.gameObject.SetActive(false);
+            buttonOK.SetActive(false);
+            greeting.gameObject.SetActive(true);
+
+            if (playerNamePanel != null)
+                playerNamePanel.SetActive(false);
+        }
+
 
         // Update is called once per frame
         void Update()

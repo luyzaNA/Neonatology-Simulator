@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Babies;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.Nurse
 {
@@ -38,6 +40,17 @@ namespace Assets.Scripts.Nurse
 
         void Update()
         {
+            if (Time.timeScale == 0) return;
+
+            if (EventSystem.current != null &&
+            EventSystem.current.currentSelectedGameObject != null &&
+            EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null)
+            {
+                moveInput = Vector3.zero;
+                animator.SetFloat("Speed", 0);
+                return;
+            }
+
             HandleMoveInput();
             UpdateAnimator();
 
