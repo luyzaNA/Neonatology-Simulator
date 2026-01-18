@@ -22,7 +22,12 @@ namespace Assets.Scripts.Managers
         public TextMeshProUGUI PlayerNameText;
         public GameObject playerNamePanel;
 
+
+        [Header("Start game")]
+        public GameObject Start_game;
+
         public string PlayerName { get; private set; }
+
 
         private void Awake()
         {
@@ -78,6 +83,8 @@ namespace Assets.Scripts.Managers
 
                 if (playerNamePanel != null)
                     playerNamePanel.SetActive(false);
+
+                Start_game.SetActive(false);
 
                 ShowGreetingOnly();
                 DisplayGreeting(PlayerName);
@@ -151,6 +158,9 @@ namespace Assets.Scripts.Managers
 
             if (playerNamePanel != null)
                 playerNamePanel.SetActive(true);
+
+            Start_game.SetActive(true);
+
         }
 
 
