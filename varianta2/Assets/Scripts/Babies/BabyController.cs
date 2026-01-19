@@ -23,7 +23,7 @@ public class BabyController : MonoBehaviour
     public bool inWaitingRoom = false;
     public bool isHighestPriority = false;
     public GameManager gameManager;
-
+    public bool isFirstBaby = false;
 
     public BabyDecisionManager babyDecisionManager;
 
@@ -52,6 +52,24 @@ public class BabyController : MonoBehaviour
         "Semne de presiune intracraniană crescută"
     };
 
+    private string[] moderateSymptoms = new string[]
+    {
+        "Febră moderată (37.5–38.5°C)",
+        "Tuse persistentă",
+        "Respirație ușor accelerată"
+    };
+
+
+    private string[] mildSymptoms = new string[]
+    {
+        "Febră ușoară",
+        "Nas înfundat",
+        "Strănut frecvent",
+        "Somn agitat"
+    };
+
+
+
     public void SetInIncubator(bool isInIncubator)
     {
         inIncubator = isInIncubator;
@@ -66,6 +84,13 @@ public class BabyController : MonoBehaviour
     {
         // Setăm panelul și butoanele inactive la start
         if (decisionPanel != null) decisionPanel.SetActive(false);
+    }
+    private IEnumerator CloseModal()
+    {
+        yield return new WaitForSeconds(4f);
+
+        decisionPanel.SetActive(false);
+       
     }
 
     private void OnMouseDown()
@@ -100,7 +125,7 @@ public class BabyController : MonoBehaviour
                 () =>
                 {
                     gameManager.AddPoints(50);
-                    gameManager.ShowHint("Corect! Bebelușul are nevoie de CT. Ai castigate 50 PUNCTE.", Color.green);
+                    gameManager.ShowHint("Corect! Simptomele indică o posibilă problemă neurologică ce necesită investigații imagistice rapide. Ai câștigat 50 PUNCTE.", Color.green);
 
                     babyDecisionManager.ChooseCT();
                 }
@@ -175,7 +200,53 @@ public class BabyController : MonoBehaviour
     {
         if (!isHighestPriority)
         {
-            StartCoroutine(ShowGeneralMessage("Aceste belelus are prioritate scazuta. Continua cu bebelusul cel mai grav."));
+
+            ClearDecisionPanel();
+            decisionPanel.SetActive(true);
+            string[] symptoms = isFirstBaby ? moderateSymptoms : mildSymptoms;
+
+            string displayText = "Simptome prezente:\n";
+            foreach (var s in symptoms)
+            {
+                displayText += "• " + s + "\n";
+            }
+            symptomsText.text = displayText;
+
+            // Afisam intrebarea
+            questionText.text = "Cum tratezi bebelușul?";
+
+            // Setam actiuni pentru butoane
+            if (incubatorButton != null)
+                SetButton(
+                    incubatorButton,
+                    "Verifica temperatura",
+                    () =>
+                    {
+                        gameManager.AddPoints(0);
+                        gameManager.ShowHint("Gresit! Un alt bebelus este mai prioritar, cu simptome grave! Nu ai primit PUNCTE.", Color.red);                    }
+                );
+
+            if (giveMedicineButton != null)
+                SetButton(
+                    giveMedicineButton,
+                    "Adinistreaza medicamente",
+                    () =>
+                    {
+                        gameManager.ShowHint("Gresit! Un alt bebelus este mai prioritar, cu simptome grave! Nu ai primit PUNCTE.", Color.red);
+                    }
+                );
+
+            if (doNothingButton != null)
+                SetButton(
+                    doNothingButton,
+
+                    "Trateaza alt bebelus",
+                     () =>
+                     {
+                         gameManager.ShowHint("Corect! Un alt bebelus este mai prioritar! Ai castigate 20 PUNCTE.", Color.green);
+                         StartCoroutine(CloseModal());
+                     }
+                );
         }
 
         if(isHighestPriority)
