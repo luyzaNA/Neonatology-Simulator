@@ -4,6 +4,8 @@ public class CallAmbulanceUI : MonoBehaviour
 {
     public AmbulanceController ambulance;
 
+    public GameObject StartGameButton;
+
     public void CallAmbulance()
     {
         Debug.Log("Buton apăsat!");  // verificare
@@ -11,6 +13,9 @@ public class CallAmbulanceUI : MonoBehaviour
             ambulance.StartMoving();
         else
             Debug.Log("Ambulance este null!");
+
+        if (StartGameButton != null)
+            StartGameButton.SetActive(false);
     }
 
 }

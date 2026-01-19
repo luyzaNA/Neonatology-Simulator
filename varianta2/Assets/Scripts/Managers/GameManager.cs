@@ -2,15 +2,12 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace Assets.Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
-
-        public ScoreManager ScoreManager;
         public HintManager HintManager;
 
         [Header("Greeting Settings")]
@@ -53,12 +50,6 @@ namespace Assets.Scripts.Managers
 
             if (playerScoreText != null)
                 playerScoreText.text = $"Score: {score}";
-        }
-
-        public void GivePoints(int points)
-        {
-            if (ScoreManager != null)
-                ScoreManager.AddPoints(points);
         }
 
         public void ShowHint(string hint)
@@ -198,7 +189,6 @@ namespace Assets.Scripts.Managers
         public void AddPoints(int points)
         {
             score += points;
-            ScoreManager.setPoints(points);
             UpdatePlayerUI();
         }
 

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Managers
     public class HintManager : MonoBehaviour
     {
         public TextMeshProUGUI hintText;
-        public float hintDUration = 3f;
+        public float hintDUration = 4f;
 
         public void ShowHint(string message)
         {

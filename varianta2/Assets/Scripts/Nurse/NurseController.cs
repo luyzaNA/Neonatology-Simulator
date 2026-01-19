@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Babies;
+﻿using Assets.Scripts.Cribs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +8,7 @@ namespace Assets.Scripts.Nurse
     public class NurseController : MonoBehaviour
     {
         [Header("Movement")]
-        public float moveSpeed = 2f;
+        public float moveSpeed = 1f;
         public float rotationSpeed = 8f;
 
         [Header("Carrying")]
@@ -17,12 +17,21 @@ namespace Assets.Scripts.Nurse
         public float pickupHeightOffset = 0.8f;
 
         private bool isCarryingBaby;
-        private Babies.Baby carriedBaby;
+        private BabyController carriedBaby;
 
         private Rigidbody rb;
         private Vector3 moveInput;
         private Camera mainCam;
         private Animator animator;
+
+        public Incubator incubator;
+
+        [Header("Waypoint Movement")]
+        public Transform[] waypoints;     // assign in inspector
+        public float waypointThreshold = 0.5f; // distance to consider "reached"
+        private int currentWaypoint = 0;
+        public bool followWaypoints = false;   // enable automatic movement
+
 
         void Start()
         {
@@ -41,6 +50,14 @@ namespace Assets.Scripts.Nurse
         void Update()
         {
             if (Time.timeScale == 0) return;
+
+            if (followWaypoints && waypoints.Length > 0)
+            {
+                MoveAlongWaypoints();
+                UpdateAnimator();
+                animator.SetFloat("Speed", 1);
+                return;
+            }
 
             if (EventSystem.current != null &&
             EventSystem.current.currentSelectedGameObject != null &&
@@ -61,19 +78,49 @@ namespace Assets.Scripts.Nurse
                 else
                     DropBaby();
             }
-
-            //if (Input.GetMouseButtonDown(0))
-            //    InteractWithBaby();
         }
 
-        void TryPickUpBaby()
+        void MoveAlongWaypoints()
+        {
+            if (currentWaypoint >= waypoints.Length) return;
+            Vector3 targetPos = waypoints[currentWaypoint].position;
+            targetPos.y = transform.position.y;
+            Vector3 direction = (targetPos - transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            Vector3 flatDistance = targetPos - transform.position;
+            flatDistance.y = 0;
+            if (flatDistance.magnitude < waypointThreshold)
+            {
+                currentWaypoint++;
+                if (currentWaypoint >= waypoints.Length)
+                {
+                    followWaypoints = false;
+                    animator.SetFloat("Speed", 0);
+                    PutBabyInIncubator();
+                }
+            }
+        }
+
+
+
+        public void TryPickUpBaby()
         {
             Vector3 center = transform.position + Vector3.up * pickupHeightOffset;
             Collider[] hits = Physics.OverlapSphere(center, pickupRange);
 
             foreach (Collider hit in hits)
             {
-                Babies.Baby baby = hit.GetComponentInParent<Babies.Baby>();
+                BabyController baby = hit.GetComponentInParent<BabyController>();
                 if (baby == null)
                     continue;
 
@@ -91,10 +138,20 @@ namespace Assets.Scripts.Nurse
                 baby.transform.SetParent(carryPoint);
                 baby.transform.localPosition = Vector3.zero;
                 baby.transform.localRotation = Quaternion.identity;
-
-                Debug.Log($"Picked up baby: {baby.babyName}");
                 return;
             }
+        }
+
+        void PutBabyInIncubator()
+        {
+            if (!carriedBaby || !incubator)
+                return;
+            incubator.PlaceBabyIncubator(carriedBaby);
+            carriedBaby.ShowDecisionPanelIncubator();
+            carriedBaby = null;
+            isCarryingBaby = false;
+            
+
         }
 
         void DropBaby()
@@ -112,8 +169,6 @@ namespace Assets.Scripts.Nurse
             Collider babyCollider = carriedBaby.GetComponent<Collider>();
             if (babyCollider)
                 babyCollider.enabled = true;
-
-            Debug.Log($"Dropped baby: {carriedBaby.babyName}");
 
             carriedBaby = null;
             isCarryingBaby = false;
@@ -169,16 +224,9 @@ namespace Assets.Scripts.Nurse
             if (!Physics.Raycast(ray, out RaycastHit hit, 5f))
                 return;
 
-            Babies.Baby baby = hit.collider.GetComponentInParent<Babies.Baby>();
+            BabyController baby = hit.collider.GetComponentInParent<BabyController>();
             if (!baby)
                 return;
-
-            Debug.Log($"[NurseController] Interacting with {baby.babyName}");
-
-            if (baby.hunger > 50)
-                baby.Feed();
-            else
-                baby.ChangeDiaper();
         }
 
         // ================= DEBUG =================

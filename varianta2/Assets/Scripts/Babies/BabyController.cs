@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Assets.Scripts.Managers;
+using System.Collections;
 
 public class BabyController : MonoBehaviour
 {
@@ -14,6 +16,10 @@ public class BabyController : MonoBehaviour
     public Button giveMedicineButton;
     public Button doNothingButton;
 
+    public bool inIncubator = false;
+    public GameManager gameManager;
+
+
     public BabyDecisionManager babyDecisionManager;
 
     // Lista de simptome grave
@@ -25,6 +31,11 @@ public class BabyController : MonoBehaviour
         "Paloare severă"
     };
 
+    public void SetInIncubator(bool isInIncubator)
+    {
+        inIncubator = isInIncubator;
+    }
+
     private void Start()
     {
         // Setăm panelul și butoanele inactive la start
@@ -33,10 +44,104 @@ public class BabyController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        ShowDecisionPanel();
+        if(!inIncubator)
+            ShowDecisionPanelAmbulance();
     }
 
-    private void ShowDecisionPanel()
+    private void ClearDecisionPanel()
+    {
+        // Reset text
+        if (symptomsText != null)
+            symptomsText.text = string.Empty;
+
+        if (questionText != null)
+            questionText.text = string.Empty;
+
+        // Reset butoane
+        ClearButton(incubatorButton);
+        ClearButton(giveMedicineButton);
+        ClearButton(doNothingButton);
+    }
+    private void ClearButton(Button button)
+    {
+        if (button == null) return;
+
+        button.onClick.RemoveAllListeners();
+
+        TextMeshProUGUI txt = button.GetComponentInChildren<TextMeshProUGUI>();
+        if (txt != null)
+            txt.text = string.Empty;
+
+        button.interactable = true;
+    }
+
+
+    private void SetButton(Button button, string text, UnityEngine.Events.UnityAction action)
+    {
+        if (button == null) return;
+
+        button.onClick.RemoveAllListeners();
+
+        TextMeshProUGUI txt = button.GetComponentInChildren<TextMeshProUGUI>();
+        if (txt != null)
+            txt.text = text;
+
+        button.onClick.AddListener(action);
+    }
+
+
+    public void ShowDecisionPanelIncubator()
+    {
+        // 🔥 curățăm tot înainte
+        ClearDecisionPanel();
+
+        if (decisionPanel == null || symptomsText == null || questionText == null)
+            return;
+
+        decisionPanel.SetActive(true);
+
+        symptomsText.text = "Bebelușul este în incubator.";
+        questionText.text = "Cum continui să ai grijă de bebeluș?";
+
+        // ❌ OPȚIUNE GREȘITĂ
+        SetButton(
+            incubatorButton,
+            "Nu face nimic",
+            () =>
+            {
+                gameManager.AddPoints(0);
+                gameManager.ShowHint("Greșit! Bebelușul are nevoie de supraveghere continuă.");
+            }
+        );
+
+        // ✅ OPȚIUNE CORECTĂ
+        SetButton(
+            giveMedicineButton,
+            "Verifică continuu funcțiile vitale",
+            () =>
+            {
+                gameManager.AddPoints(10);
+                gameManager.ShowHint("Corect! Bebelușul este monitorizat constant.");
+                StartCoroutine(HideIncubatorPanelDelayed(3f));
+            }
+        );
+
+        // ❌ OPȚIUNE GREȘITĂ
+        SetButton(
+            doNothingButton,
+            "Externează bebelușul",
+            () =>
+            {
+                gameManager.AddPoints(0);
+                gameManager.ShowHint("Greșit! Bebelușul nu este stabil pentru externare.");
+                
+            }
+        );
+    }
+
+
+
+    private void ShowDecisionPanelAmbulance()
     {
         if (decisionPanel != null && symptomsText != null && questionText != null)
         {
@@ -67,11 +172,26 @@ public class BabyController : MonoBehaviour
 
     private void PutInIncubator()
     {
-        Debug.Log("Bebelusul a fost pus in incubator!");
         babyDecisionManager.ChooseIncubator();
-       // ClosePanel();
-        // Aici poti sa faci animatie / logica incubator
     }
+
+    private IEnumerator ShowIncubatorPanelDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Afișăm panelul de îngrijire în incubator
+        ShowDecisionPanelIncubator();
+    }
+
+    private IEnumerator HideIncubatorPanelDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Afișăm panelul de îngrijire în incubator
+        decisionPanel.SetActive(false);
+    }
+
+
 
     private void GiveMedicine()
     {

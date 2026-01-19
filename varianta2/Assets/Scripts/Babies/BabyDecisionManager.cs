@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using TMPro;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Nurse;
+using System.Collections;
 
 public class BabyDecisionManager : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class BabyDecisionManager : MonoBehaviour
     public GameObject decisionPanel; // panelul cu decizia
     public TextMeshProUGUI symptomText;
     public TextMeshProUGUI questionText;
+    public NurseController nurseController;
 
     [Header("Hint Text")]
     public TextMeshProUGUI hintText;
@@ -26,35 +29,38 @@ public class BabyDecisionManager : MonoBehaviour
         if (decisionPanel != null)
             decisionPanel.SetActive(false); // ascundem panelul la start
     }
-
-    public void ShowDecisionPanel()
+    private IEnumerator StopWaypointAfterDelay(float delay)
     {
-        if (decisionPanel != null)
-        {
-            decisionPanel.SetActive(true);
-        }
-
-        if (symptomText != null)
-            symptomText.text = string.Join("\n", graveSymptoms);
-
-        if (questionText != null)
-            questionText.text = "Ce urmează să faci cu bebelușul?";
+        yield return new WaitForSeconds(delay);
     }
 
     // Butonul Incubator
     public void ChooseIncubator()
     {
         gameManager.AddPoints(10);
-        gameManager.ShowHint("Corect! Bebelușul a fost pus în incubator și primește îngrijire adecvată.");
-       // decisionPanel.SetActive(true);
+        gameManager.ShowHint(
+            "Corect! Bebelușul a fost pus în incubator și primește îngrijire adecvată. Ai primit 10 PUNCTE!"
+        );
+
+        StartCoroutine(ChooseIncubatorSequence());
     }
+
+    private IEnumerator ChooseIncubatorSequence()
+    {
+        yield return new WaitForSeconds(4f);
+
+        decisionPanel.SetActive(false);
+        nurseController.TryPickUpBaby();
+        nurseController.followWaypoints = true;
+    }
+
 
 
     // Butonul Medicine
     public void ChooseMedicine()
     {
         gameManager.AddPoints(0);
-        gameManager.ShowHint("Greșit! Medicina singură nu e suficientă.Bebelușul are nevoie de incubator.");
+        gameManager.ShowHint("Greșit! Medicina singură nu e suficientă.Bebelușul are nevoie de incubator. Nu ai primit PUNCTE!");
        // decisionPanel.SetActive(false);
     }
 
@@ -62,7 +68,7 @@ public class BabyDecisionManager : MonoBehaviour
     public void ChooseNothing()
     {
         gameManager.AddPoints(0);
-        gameManager.ShowHint("Greșit! Nu ai făcut nimic. Bebelușul are nevoie de ajutor urgent!");
+        gameManager.ShowHint("Greșit! Nu ai făcut nimic. Bebelușul are nevoie de ajutor urgent! Nu ai primit PUNCTE!");
        // decisionPanel.SetActive(false);
     }
 }
