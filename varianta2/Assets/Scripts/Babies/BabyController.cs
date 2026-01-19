@@ -10,6 +10,7 @@ public class BabyController : MonoBehaviour
     public GameObject decisionPanel;       // Panel cu simptome + intrebare + optiuni
     public TextMeshProUGUI symptomsText;
     public TextMeshProUGUI questionText;
+    public TextMeshProUGUI generalMessage;
 
     [Header("Buttons")]
     public Button incubatorButton;
@@ -17,6 +18,10 @@ public class BabyController : MonoBehaviour
     public Button doNothingButton;
 
     public bool inIncubator = false;
+    public bool inBed = false;
+    public bool inAmbulance = false;
+    public bool inWaitingRoom = false;
+    public bool isHighestPriority = false;
     public GameManager gameManager;
 
 
@@ -31,9 +36,30 @@ public class BabyController : MonoBehaviour
         "Paloare severă"
     };
 
+    private string[] severeSymptoms2 = new string[]
+    {
+        "Vărsături persistente",
+        "Convulsii",
+        "Deshidratare severă",
+        "Febră mare sau instabilă",
+        "Letargie severă și refuz alimentar"
+    };
+
+    private string[] severeSymptoms3 = new string[]
+    {
+        "Convulsii atipice sau prelungite",
+        "Alterarea stării de conștiență",
+        "Semne de presiune intracraniană crescută"
+    };
+
     public void SetInIncubator(bool isInIncubator)
     {
         inIncubator = isInIncubator;
+    }
+
+    public void SetInBed(bool isInBed)
+    {
+        inBed = isInBed;
     }
 
     private void Start()
@@ -44,8 +70,161 @@ public class BabyController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(!inIncubator)
+        if(inAmbulance)
             ShowDecisionPanelAmbulance();
+
+        if (inWaitingRoom)
+            ShowDecisionPanelWaitingRoom();
+    }
+
+    public void ShowDecisionPanelTemperature()
+    {
+        ClearDecisionPanel();
+        decisionPanel.SetActive(true);
+
+        string displayText = "Temepratura este foarte ridicata. Au fost regasite si urmatoarele simptome aditionale.\n";
+        foreach (var s in severeSymptoms3)
+        {
+            displayText += "• " + s + "\n";
+        }
+        symptomsText.text = displayText;
+
+        // Afisam intrebarea
+        questionText.text = "Cum tratezi bebelușul?";
+
+        // Setam actiuni pentru butoane
+        if (incubatorButton != null)
+            SetButton(
+                incubatorButton,
+                "Efectueaza CT",
+                () =>
+                {
+                    gameManager.AddPoints(50);
+                    gameManager.ShowHint("Corect! Bebelușul are nevoie de CT. Ai castigate 50 PUNCTE.", Color.green);
+
+                    babyDecisionManager.ChooseCT();
+                }
+            );
+
+        if (giveMedicineButton != null)
+            SetButton(
+                giveMedicineButton,
+                "Adinistreaza medicamente",
+                () =>
+                {
+                    gameManager.ShowHint("Gresit! Bebelușul are nevoie de CT. Nu ai castigat PUNCTE.", Color.red);
+                }
+            );
+
+        if (doNothingButton != null)
+            SetButton(
+                doNothingButton,
+                "Trimite-l acasa",
+                DoNothing
+            );
+        
+
+    }
+
+    public void ShowDecisionPanelCT()
+    {
+        ClearDecisionPanel();
+        decisionPanel.SetActive(true);
+
+        string displayText = "CT-ul a indicat o stare de sanatate nu tocmai buna.\n";
+        symptomsText.text = displayText;
+
+        // Afisam intrebarea
+        questionText.text = "Cum tratezi bebelușul?";
+
+        // Setam actiuni pentru butoane
+        if (incubatorButton != null)
+            SetButton(
+                incubatorButton,
+                "Interneaza bebelus",
+                () =>
+                {
+                    gameManager.AddPoints(50);
+                    gameManager.ShowHint("Corect! Bebelușul are nevoie de internare. Ai castigate 20 PUNCTE.", Color.green);
+
+                    babyDecisionManager.ChooseInternare();
+                }
+            );
+
+        if (giveMedicineButton != null)
+            SetButton(
+                giveMedicineButton,
+                "Adinistreaza medicamente",
+                () =>
+                {
+                    gameManager.ShowHint("Gresit! Bebelușul are nevoie de internare. Nu ai castigat PUNCTE.", Color.red);
+                }
+            );
+
+        if (doNothingButton != null)
+            SetButton(
+                doNothingButton,
+                "Trimite-l acasa",
+                DoNothing
+            );
+
+
+    }
+
+    public void ShowDecisionPanelWaitingRoom()
+    {
+        if (!isHighestPriority)
+        {
+            StartCoroutine(ShowGeneralMessage("Aceste belelus are prioritate scazuta. Continua cu bebelusul cel mai grav."));
+        }
+
+        if(isHighestPriority)
+        {
+            ClearDecisionPanel();
+            decisionPanel.SetActive(true);
+
+            string displayText = "Simptome prezente:\n";
+            foreach (var s in severeSymptoms2)
+            {
+                displayText += "• " + s + "\n";
+            }
+            symptomsText.text = displayText;
+
+            // Afisam intrebarea
+            questionText.text = "Cum tratezi bebelușul?";
+
+            // Setam actiuni pentru butoane
+            if (incubatorButton != null)
+                SetButton(
+                    incubatorButton,
+                    "Verifica temperatura",
+                    () =>
+                    {
+                        gameManager.AddPoints(20);
+                        gameManager.ShowHint("Corect! Bebelușul are nevoie de verificare temperaturii. Ai castigate 20 PUNCTE.", Color.green);
+
+                        babyDecisionManager.ChooseTemperatureCheck();
+                    }
+                );
+
+            if (giveMedicineButton != null)
+                SetButton(
+                    giveMedicineButton,
+                    "Adinistreaza medicamente",
+                    () =>
+                    {
+                        gameManager.ShowHint("Gresit! Bebelușul are nevoie de verificare temperaturii. Nu ai castigat PUNCTE.", Color.red);
+                    }
+                );
+
+            if (doNothingButton != null)
+                SetButton(
+                    doNothingButton,
+                    "Trimite-l acasa",
+                    DoNothing
+                );
+        }
+
     }
 
     private void ClearDecisionPanel()
@@ -179,6 +358,12 @@ public class BabyController : MonoBehaviour
 
         // Afișăm panelul de îngrijire în incubator
         decisionPanel.SetActive(false);
+    }
+
+    private IEnumerator ShowGeneralMessage(string message)
+    {   generalMessage.text = message;
+        yield return new WaitForSeconds(4f);
+        generalMessage.text = "";
     }
 
 

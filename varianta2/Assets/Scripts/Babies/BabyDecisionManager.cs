@@ -45,6 +45,20 @@ public class BabyDecisionManager : MonoBehaviour
         StartCoroutine(ChooseIncubatorSequence());
     }
 
+    public void ChooseTemperatureCheck()
+    {
+        StartCoroutine(ChooseTemperatureCheckSequence());
+    }
+
+    public void ChooseCT()
+    {
+        StartCoroutine(ChooseCTSequence());
+    }
+    public void ChooseInternare()
+    {
+        StartCoroutine(ChooseInternareSequence());
+    }
+
     private IEnumerator ChooseIncubatorSequence()
     {
         yield return new WaitForSeconds(4f);
@@ -52,6 +66,31 @@ public class BabyDecisionManager : MonoBehaviour
         decisionPanel.SetActive(false);
         nurseController.TryPickUpBaby();
         nurseController.followWaypoints = true;
+    }
+
+    private IEnumerator ChooseTemperatureCheckSequence()
+    {
+        yield return new WaitForSeconds(4f);
+
+        decisionPanel.SetActive(false);
+        nurseController.TryPickUpBaby();
+        nurseController.followWaypointsTemperature = true;
+    }
+
+    private IEnumerator ChooseCTSequence()
+    {
+        yield return new WaitForSeconds(4f);
+
+        decisionPanel.SetActive(false);
+        nurseController.followWaypointsCT = true;
+    }
+
+    private IEnumerator ChooseInternareSequence()
+    {
+        yield return new WaitForSeconds(4f);
+
+        decisionPanel.SetActive(false);
+        nurseController.followWaypointsInternare = true;
     }
 
 

@@ -25,12 +25,20 @@ namespace Assets.Scripts.Nurse
         private Animator animator;
 
         public Incubator incubator;
+        public Bed bed;
 
         [Header("Waypoint Movement")]
         public Transform[] waypoints;     // assign in inspector
+        public Transform[] waypointsTemperatureCheck;     // assign in inspector
+        public Transform[] waypointsCT;     // assign in inspector
+        public Transform[] waypointsInternare;     // assign in inspector
         public float waypointThreshold = 0.5f; // distance to consider "reached"
         private int currentWaypoint = 0;
         public bool followWaypoints = false;   // enable automatic movement
+        public bool followWaypointsTemperature = false;
+        public bool followWaypointsInternare = false;
+
+        public bool followWaypointsCT = false;// enable automatic movement
 
 
         void Start()
@@ -59,6 +67,30 @@ namespace Assets.Scripts.Nurse
                 return;
             }
 
+            if (followWaypointsTemperature && waypointsTemperatureCheck.Length > 0)
+            {
+                MoveAlongWaypointsTemperature();
+                UpdateAnimator();
+                animator.SetFloat("Speed", 1);
+                return;
+            }
+
+            if (followWaypointsCT && waypointsCT.Length > 0)
+            {
+                MoveAlongWaypointsCT();
+                UpdateAnimator();
+                animator.SetFloat("Speed", 1);
+                return;
+            }
+
+            if (followWaypointsInternare && waypointsInternare.Length > 0)
+            {
+                MoveAlongWaypointsInternare();
+                UpdateAnimator();
+                animator.SetFloat("Speed", 1);
+                return;
+            }
+
             if (EventSystem.current != null &&
             EventSystem.current.currentSelectedGameObject != null &&
             EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null)
@@ -77,6 +109,102 @@ namespace Assets.Scripts.Nurse
                     TryPickUpBaby();
                 else
                     DropBaby();
+            }
+        }
+
+        void MoveAlongWaypointsCT()
+        {
+            if (currentWaypoint >= waypointsCT.Length) return;
+            Vector3 targetPos = waypointsCT[currentWaypoint].position;
+            targetPos.y = transform.position.y;
+            Vector3 direction = (targetPos - transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            Vector3 flatDistance = targetPos - transform.position;
+            flatDistance.y = 0;
+            if (flatDistance.magnitude < waypointThreshold)
+            {
+                currentWaypoint++;
+                if (currentWaypoint >= waypointsCT.Length)
+                {
+                    followWaypointsCT = false;
+                    animator.SetFloat("Speed", 0);
+                    currentWaypoint = 0;
+                    CheckbabyCT();
+                }
+            }
+        }
+
+        void MoveAlongWaypointsInternare()
+        {
+            if (currentWaypoint >= waypointsInternare.Length) return;
+            Vector3 targetPos = waypointsInternare[currentWaypoint].position;
+            targetPos.y = transform.position.y;
+            Vector3 direction = (targetPos - transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            Vector3 flatDistance = targetPos - transform.position;
+            flatDistance.y = 0;
+            if (flatDistance.magnitude < waypointThreshold)
+            {
+                currentWaypoint++;
+                if (currentWaypoint >= waypointsInternare.Length)
+                {
+                    followWaypointsInternare = false;
+                    animator.SetFloat("Speed", 0);
+                    currentWaypoint = 0;
+                    InterneazaBebelus();
+                }
+            }
+        }
+
+        void MoveAlongWaypointsTemperature()
+        {
+            if (currentWaypoint >= waypointsTemperatureCheck.Length) return;
+            Vector3 targetPos = waypointsTemperatureCheck[currentWaypoint].position;
+            targetPos.y = transform.position.y;
+            Vector3 direction = (targetPos - transform.position);
+            direction.y = 0;
+            direction.Normalize();
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+            }
+
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            Vector3 flatDistance = targetPos - transform.position;
+            flatDistance.y = 0;
+            if (flatDistance.magnitude < waypointThreshold)
+            {
+                currentWaypoint++;
+                if (currentWaypoint >= waypointsTemperatureCheck.Length)
+                {
+                    followWaypointsTemperature = false;
+                    animator.SetFloat("Speed", 0);
+                    currentWaypoint = 0;
+                    CheckbabyTemperature();
+                }
             }
         }
 
@@ -106,6 +234,7 @@ namespace Assets.Scripts.Nurse
                 {
                     followWaypoints = false;
                     animator.SetFloat("Speed", 0);
+                    currentWaypoint = 0;
                     PutBabyInIncubator();
                 }
             }
@@ -142,6 +271,29 @@ namespace Assets.Scripts.Nurse
             }
         }
 
+        void CheckbabyTemperature()
+        {
+            if (!carriedBaby)
+                return;
+            carriedBaby.ShowDecisionPanelTemperature();
+        }
+
+        void CheckbabyCT()
+        {
+            if (!carriedBaby)
+                return;
+            carriedBaby.ShowDecisionPanelCT();
+        }
+
+        void InterneazaBebelus()
+        {
+            if (!carriedBaby || !bed)
+                return;
+            bed.PlaceBabyInBed(carriedBaby);
+            carriedBaby = null;
+            isCarryingBaby = false;
+        }
+
         void PutBabyInIncubator()
         {
             if (!carriedBaby || !incubator)
@@ -150,8 +302,6 @@ namespace Assets.Scripts.Nurse
             carriedBaby.ShowDecisionPanelIncubator();
             carriedBaby = null;
             isCarryingBaby = false;
-            
-
         }
 
         void DropBaby()
