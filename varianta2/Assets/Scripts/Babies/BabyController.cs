@@ -110,7 +110,7 @@ public class BabyController : MonoBehaviour
             () =>
             {
                 gameManager.AddPoints(0);
-                gameManager.ShowHint("Greșit! Bebelușul are nevoie de supraveghere continuă.");
+                gameManager.ShowHint("Greșit! Bebelușul are nevoie de supraveghere continuă.", Color.red);
             }
         );
 
@@ -121,7 +121,7 @@ public class BabyController : MonoBehaviour
             () =>
             {
                 gameManager.AddPoints(10);
-                gameManager.ShowHint("Corect! Bebelușul este monitorizat constant.");
+                gameManager.ShowHint("Corect! Bebelușul este monitorizat constant. Ai obtinut 10 PUNCTE!", Color.green);
                 StartCoroutine(HideIncubatorPanelDelayed(3f));
             }
         );
@@ -133,13 +133,11 @@ public class BabyController : MonoBehaviour
             () =>
             {
                 gameManager.AddPoints(0);
-                gameManager.ShowHint("Greșit! Bebelușul nu este stabil pentru externare.");
+                gameManager.ShowHint("Greșit! Bebelușul nu este stabil pentru externare.", Color.red);
                 
             }
         );
     }
-
-
 
     private void ShowDecisionPanelAmbulance()
     {
@@ -175,14 +173,6 @@ public class BabyController : MonoBehaviour
         babyDecisionManager.ChooseIncubator();
     }
 
-    private IEnumerator ShowIncubatorPanelDelayed(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        // Afișăm panelul de îngrijire în incubator
-        ShowDecisionPanelIncubator();
-    }
-
     private IEnumerator HideIncubatorPanelDelayed(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -207,11 +197,5 @@ public class BabyController : MonoBehaviour
         babyDecisionManager.ChooseNothing();
 
         //ClosePanel();
-    }
-
-    private void ClosePanel()
-    {
-        if (decisionPanel != null)
-            decisionPanel.SetActive(false);
     }
 }

@@ -52,10 +52,10 @@ namespace Assets.Scripts.Managers
                 playerScoreText.text = $"Score: {score}";
         }
 
-        public void ShowHint(string hint)
+        public void ShowHint(string hint, Color? color = null)
         {
             if (HintManager != null)
-                HintManager.ShowHint(hint);
+                HintManager.ShowHint(hint, color);
         }
 
         void LoadPlayerName()

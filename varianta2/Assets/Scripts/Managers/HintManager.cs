@@ -10,16 +10,20 @@ namespace Assets.Scripts.Managers
         public TextMeshProUGUI hintText;
         public float hintDUration = 4f;
 
-        public void ShowHint(string message)
+        public void ShowHint(string message, Color? color = null)
         {
             StopAllCoroutines();
-            StartCoroutine(DisplayHint(message));
+            StartCoroutine(DisplayHint(message, color));
         }
 
-        IEnumerator DisplayHint(string message)
+        IEnumerator DisplayHint(string message, Color? color = null)
         {
             if ( hintText != null)
             {
+
+                if (color.HasValue)
+                    hintText.color = color.Value;
+
                 hintText.text = message;
                 hintText.enabled = true;
                 yield return new WaitForSeconds(hintDUration);
