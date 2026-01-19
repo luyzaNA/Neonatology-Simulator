@@ -1,0 +1,471 @@
+# Blender MTL File: 'Hospital waiting room_main_baked.blend'
+# Material Count: 43
+
+newmtl Chair_material
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.222590 0.222590 0.222590
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Furniture.png
+
+newmtl Chair_material.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.108961 0.174072 0.222589
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Furniture.png
+
+newmtl Clock
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\istockphoto-590618818-612x612.jpg
+
+newmtl Clock_body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl Daun
+Ns 445.252918
+Ka 1.000000 1.000000 1.000000
+Kd 0.021543 0.249214 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\leaves.png
+
+newmtl Door_handle
+Ns 416.611545
+Ka 1.000000 1.000000 1.000000
+Kd 0.572995 0.201091 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd tex\\Reception_desk_doors.png
+
+newmtl FIber_Alpha
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.094118 0.047059 0.031373
+Ks 0.218182 0.218182 0.218182
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -o 2.184850 -5.104229 0.000000 -s 0.142857 0.142857 1.000000 D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\assets\\models\\monstera_plant_a085a84e-7ea1-44fd-ad6b-8a9b9846e570\\textures_2k\\Fiber_coco_norm.jpg
+map_d -o 2.184850 -5.104229 0.000000 -s 0.142857 0.142857 1.000000 D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\assets\\models\\monstera_plant_a085a84e-7ea1-44fd-ad6b-8a9b9846e570\\textures_2k\\Fiber_coco_mask.jpg
+
+newmtl Fan
+Ns 545.429701
+Ka 0.431193 0.431193 0.431193
+Kd 0.756507 0.800000 0.697218
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl Fiber
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.094118 0.047059 0.031373
+Ks 0.268182 0.268182 0.268182
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Foam
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Foam.png
+
+newmtl Glazed_ceramic
+Ns 440.413214
+Ka 1.000000 1.000000 1.000000
+Kd 0.752942 0.723055 0.637597
+Ks 0.763000 0.763000 0.763000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\pots.png
+
+newmtl Material.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.036801 0.036801 0.036801
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Reception_desk_doors.png
+
+newmtl Metal_dark
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.051694 0.051694 0.051694
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl Paper
+Ns 17.696330
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl Paper.001
+Ns 17.696330
+Ka 1.000000 1.000000 1.000000
+Kd 0.528779 0.520987 0.434229
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Phone_keypad
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.201867 0.201867 0.201867
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl Phone_reception
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.225382 0.271081 0.287040
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl Phone_screen
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl Picture
+Ns 464.876040
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.068083 0.042832
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Waiting_room.png
+
+newmtl Pin
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.008587 0.161985 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl Rose_Wood
+Ns 489.999983
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.400000 0.400000 0.400000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd tex\\Reception_desk_doors.png
+
+newmtl Seat
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.104609 0.104609 0.104609
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl Sheets_arranger
+Ns 118.361250
+Ka 0.311927 0.311927 0.311927
+Kd 0.201869 0.201869 0.201869
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl Soil_1
+Ns 19.077874
+Ka 1.000000 1.000000 1.000000
+Kd 0.021701 0.008543 0.002504
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl White
+Ns 714.793386
+Ka 1.000000 1.000000 1.000000
+Kd 0.859920 0.859920 0.859920
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Reception_desk_doors.png
+
+newmtl Wood.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Furniture.png
+
+newmtl carpet
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl ceiling
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.987865 1.000000 0.873489
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl ceramic_bumped_grey
+Ns 477.355367
+Ka 1.000000 1.000000 1.000000
+Kd 0.099558 0.099558 0.099558
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\pots.png
+
+newmtl chart_board
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl flower.001
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.093877 0.165839 0.013595
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\leaves.png
+
+newmtl glass
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.330000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl glass_window
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 9.363201 9.363201 9.363201
+Ni 1.330000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl leaf.002
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.051420 0.105294 0.017505
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\leaves.png
+
+newmtl leaf_root
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\textures_1k\\cypressbark220b.jpg
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\textures_1k\\bark2.jpg
+
+newmtl light
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 8.779346 8.779346 8.779346
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl light_body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.611593 0.168135
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Blender\\Non-fiverr\\Adams_B\\Project_1\\1_Hospital waiting room\\Wall_ceiling.png
+
+newmtl metal
+Ns 545.429701
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl wall_blue
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.441737 0.608140 0.665215
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Walls.png
+
+newmtl wall_design
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.283149 0.254152 0.184475
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Walls.png
+
+newmtl white_wall
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Walls.png
+
+newmtl wood_dark
+Ns 398.046274
+Ka 1.000000 1.000000 1.000000
+Kd 0.072280 0.012822 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Others_reception_chairs.png
+
+newmtl wood_flooring
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd tex\\Floor.png
