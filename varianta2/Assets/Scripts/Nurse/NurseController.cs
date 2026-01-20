@@ -28,17 +28,17 @@ namespace Assets.Scripts.Nurse
         public Bed bed;
 
         [Header("Waypoint Movement")]
-        public Transform[] waypoints;     // assign in inspector
-        public Transform[] waypointsTemperatureCheck;     // assign in inspector
-        public Transform[] waypointsCT;     // assign in inspector
-        public Transform[] waypointsInternare;     // assign in inspector
-        public float waypointThreshold = 0.5f; // distance to consider "reached"
+        public Transform[] waypoints;     
+        public Transform[] waypointsTemperatureCheck;     
+        public Transform[] waypointsCT;     
+        public Transform[] waypointsInternare;    
+        public float waypointThreshold = 0.5f;
         private int currentWaypoint = 0;
-        public bool followWaypoints = false;   // enable automatic movement
+        public bool followWaypoints = false;   
         public bool followWaypointsTemperature = false;
         public bool followWaypointsInternare = false;
 
-        public bool followWaypointsCT = false;// enable automatic movement
+        public bool followWaypointsCT = false;
 
 
         void Start()

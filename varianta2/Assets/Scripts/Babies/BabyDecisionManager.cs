@@ -7,8 +7,8 @@ using System.Collections;
 
 public class BabyDecisionManager : MonoBehaviour
 {
-    public GameManager gameManager; // referință la GameManager pentru puncte
-    public GameObject decisionPanel; // panelul cu decizia
+    public GameManager gameManager; 
+    public GameObject decisionPanel;
     public TextMeshProUGUI symptomText;
     public TextMeshProUGUI questionText;
     public NurseController nurseController;
@@ -16,7 +16,6 @@ public class BabyDecisionManager : MonoBehaviour
     [Header("Hint Text")]
     public TextMeshProUGUI hintText;
 
-    // Exemplu de simptome grave
     private string[] graveSymptoms = new string[]
     {
         "Respirație dificilă",
@@ -27,19 +26,18 @@ public class BabyDecisionManager : MonoBehaviour
     void Start()
     {
         if (decisionPanel != null)
-            decisionPanel.SetActive(false); // ascundem panelul la start
+            decisionPanel.SetActive(false); 
     }
     private IEnumerator StopWaypointAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
     }
 
-    // Butonul Incubator
     public void ChooseIncubator()
     {
         gameManager.AddPoints(10);
         gameManager.ShowHint(
-            "Corect! Bebelușul a fost pus în incubator și primește îngrijire adecvată. Ai primit 10 PUNCTE!", Color.green
+            "Corect! Bebelușul a fost pus în incubator și primește îngrijire adecvată. Ai primit 20 PUNCTE!", Color.green
         );
 
         StartCoroutine(ChooseIncubatorSequence());
@@ -95,19 +93,18 @@ public class BabyDecisionManager : MonoBehaviour
 
 
 
-    // Butonul Medicine
     public void ChooseMedicine()
     {
         gameManager.AddPoints(0);
-        gameManager.ShowHint("Greșit! Medicina singură nu e suficientă.Bebelușul are nevoie de incubator. Nu ai primit PUNCTE!", Color.red);
-       // decisionPanel.SetActive(false);
+        gameManager.ShowHint(
+            "Greșit! Starea bebelușului necesită un mediu controlat și suport continuu, nu doar tratament medicamentos. Nu ai primit PUNCTE!",
+            Color.red
+        );
     }
 
-    // Butonul Nothing
     public void ChooseNothing()
     {
         gameManager.AddPoints(0);
-        gameManager.ShowHint("Greșit! Nu ai făcut nimic. Bebelușul are nevoie de ajutor urgent! Nu ai primit PUNCTE!", Color.red);
-       // decisionPanel.SetActive(false);
+        gameManager.ShowHint("Greșit! Bebelușul are nevoie de ajutor urgent! Nu ai primit PUNCTE!", Color.red);
     }
 }
