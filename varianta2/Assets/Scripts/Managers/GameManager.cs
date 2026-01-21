@@ -71,12 +71,11 @@ namespace Assets.Scripts.Managers
 
         }
 
-        // Use this for initialization
         void Start()
         {
             if (PlayerPrefs.HasKey("SavedName"))
             {
-               // PlayerPrefs.DeleteKey("SavedName");
+                //PlayerPrefs.DeleteKey("SavedName");
                 SetPlayerName(PlayerPrefs.GetString("SavedName"));
 
                 if (playerNamePanel != null)
@@ -94,7 +93,7 @@ namespace Assets.Scripts.Managers
                 ShowGreetingOnly();
                 DisplayGreeting(PlayerName);
 
-                StartCoroutine(HideGreetingAfterDelay(5f));
+                StartCoroutine(HideGreetingAfterDelay(3f));
             }
             else
             {
@@ -180,7 +179,6 @@ namespace Assets.Scripts.Managers
         }
 
 
-        // Update is called once per frame
         void Update()
         {
 

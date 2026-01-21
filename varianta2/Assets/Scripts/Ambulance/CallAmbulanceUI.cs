@@ -8,7 +8,7 @@ public class CallAmbulanceUI : MonoBehaviour
 
     public void CallAmbulance()
     {
-        Debug.Log("Buton apăsat!");  // verificare
+        Debug.Log("Buton apăsat!");  
         if (ambulance != null)
             ambulance.StartMoving();
         else

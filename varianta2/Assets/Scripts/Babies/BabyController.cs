@@ -7,7 +7,7 @@ using System.Collections;
 public class BabyController : MonoBehaviour
 {
     [Header("Symptoms UI")]
-    public GameObject decisionPanel;       // Panel cu simptome + intrebare + optiuni
+    public GameObject decisionPanel;       
     public TextMeshProUGUI symptomsText;
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI generalMessage;
@@ -27,7 +27,6 @@ public class BabyController : MonoBehaviour
 
     public BabyDecisionManager babyDecisionManager;
 
-    // Lista de simptome grave
     private string[] severeSymptoms = new string[]
     {
         "Respirație dificilă",
@@ -82,7 +81,6 @@ public class BabyController : MonoBehaviour
 
     private void Start()
     {
-        // Setăm panelul și butoanele inactive la start
         if (decisionPanel != null) decisionPanel.SetActive(false);
     }
     private IEnumerator CloseModal()
@@ -114,10 +112,8 @@ public class BabyController : MonoBehaviour
         }
         symptomsText.text = displayText;
 
-        // Afisam intrebarea
         questionText.text = "Cum tratezi bebelușul?";
 
-        // Setam actiuni pentru butoane
         if (incubatorButton != null)
             SetButton(
                 incubatorButton,
@@ -137,7 +133,10 @@ public class BabyController : MonoBehaviour
                 "Adinistreaza medicamente",
                 () =>
                 {
-                    gameManager.ShowHint("Gresit! Bebelușul are nevoie de CT. Nu ai castigat PUNCTE.", Color.red);
+                    gameManager.ShowHint(
+                        "Corect! Evoluția simptomelor ridică suspiciuni ce impun o investigație rapidă pentru clarificarea cauzei. Nu ai câștigat PUNCTE.",
+                        Color.red
+                    );
                 }
             );
 
@@ -159,10 +158,8 @@ public class BabyController : MonoBehaviour
         string displayText = "CT-ul a indicat o stare de sanatate nu tocmai buna.\n";
         symptomsText.text = displayText;
 
-        // Afisam intrebarea
         questionText.text = "Cum tratezi bebelușul?";
 
-        // Setam actiuni pentru butoane
         if (incubatorButton != null)
             SetButton(
                 incubatorButton,
@@ -170,7 +167,7 @@ public class BabyController : MonoBehaviour
                 () =>
                 {
                     gameManager.AddPoints(50);
-                    gameManager.ShowHint("Corect! Bebelușul are nevoie de internare. Ai castigate 20 PUNCTE.", Color.green);
+                    gameManager.ShowHint("Corect! Bebelușul are nevoie de internare. Ai castigate 50 PUNCTE.", Color.green);
 
                     babyDecisionManager.ChooseInternare();
                 }
@@ -182,7 +179,10 @@ public class BabyController : MonoBehaviour
                 "Adinistreaza medicamente",
                 () =>
                 {
-                    gameManager.ShowHint("Gresit! Bebelușul are nevoie de internare. Nu ai castigat PUNCTE.", Color.red);
+                    gameManager.ShowHint(
+                        "Greșit! Starea bebelușului necesită supraveghere continuă și reevaluare medicală. Nu ai câștigat PUNCTE.",
+                        Color.red
+                    );
                 }
             );
 
@@ -212,17 +212,14 @@ public class BabyController : MonoBehaviour
             }
             symptomsText.text = displayText;
 
-            // Afisam intrebarea
             questionText.text = "Cum tratezi bebelușul?";
 
-            // Setam actiuni pentru butoane
             if (incubatorButton != null)
                 SetButton(
                     incubatorButton,
                     "Verifica temperatura",
                     () =>
                     {
-                        gameManager.AddPoints(0);
                         gameManager.ShowHint("Gresit! Un alt bebelus este mai prioritar, cu simptome grave! Nu ai primit PUNCTE.", Color.red);                    }
                 );
 
@@ -243,6 +240,7 @@ public class BabyController : MonoBehaviour
                     "Trateaza alt bebelus",
                      () =>
                      {
+                         gameManager.AddPoints(20);
                          gameManager.ShowHint("Corect! Un alt bebelus este mai prioritar! Ai castigate 20 PUNCTE.", Color.green);
                          StartCoroutine(CloseModal());
                      }
@@ -261,19 +259,16 @@ public class BabyController : MonoBehaviour
             }
             symptomsText.text = displayText;
 
-            // Afisam intrebarea
             questionText.text = "Cum tratezi bebelușul?";
 
-            // Setam actiuni pentru butoane
             if (incubatorButton != null)
                 SetButton(
                     incubatorButton,
                     "Verifica temperatura",
                     () =>
                     {
-                        gameManager.AddPoints(20);
                         gameManager.ShowHint("Corect! Bebelușul are nevoie de verificare temperaturii. Ai castigate 20 PUNCTE.", Color.green);
-
+                        gameManager.AddPoints(20);
                         babyDecisionManager.ChooseTemperatureCheck();
                     }
                 );
@@ -284,7 +279,10 @@ public class BabyController : MonoBehaviour
                     "Adinistreaza medicamente",
                     () =>
                     {
-                        gameManager.ShowHint("Gresit! Bebelușul are nevoie de verificare temperaturii. Nu ai castigat PUNCTE.", Color.red);
+                        gameManager.ShowHint(
+                            "Greșit! Starea bebelușului nu a fost evaluată suficient în acest moment. Nu ai câștigat PUNCTE.",
+                            Color.red
+                        );
                     }
                 );
 
@@ -300,14 +298,12 @@ public class BabyController : MonoBehaviour
 
     private void ClearDecisionPanel()
     {
-        // Reset text
         if (symptomsText != null)
             symptomsText.text = string.Empty;
 
         if (questionText != null)
             questionText.text = string.Empty;
 
-        // Reset butoane
         ClearButton(incubatorButton);
         ClearButton(giveMedicineButton);
         ClearButton(doNothingButton);
@@ -342,7 +338,6 @@ public class BabyController : MonoBehaviour
 
     public void ShowDecisionPanelIncubator()
     {
-        // 🔥 curățăm tot înainte
         ClearDecisionPanel();
 
         if (decisionPanel == null || symptomsText == null || questionText == null)
@@ -353,7 +348,6 @@ public class BabyController : MonoBehaviour
         symptomsText.text = "Bebelușul este în incubator.";
         questionText.text = "Cum continui să ai grijă de bebeluș?";
 
-        // ❌ OPȚIUNE GREȘITĂ
         SetButton(
             incubatorButton,
             "Nu face nimic",
@@ -364,7 +358,6 @@ public class BabyController : MonoBehaviour
             }
         );
 
-        // ✅ OPȚIUNE CORECTĂ
         SetButton(
             giveMedicineButton,
             "Verifică continuu funcțiile vitale",
@@ -376,7 +369,6 @@ public class BabyController : MonoBehaviour
             }
         );
 
-        // ❌ OPȚIUNE GREȘITĂ
         SetButton(
             doNothingButton,
             "Externează bebelușul",
@@ -395,7 +387,6 @@ public class BabyController : MonoBehaviour
         {
             decisionPanel.SetActive(true);
 
-            // Afisam simptomele
             string displayText = "Simptome prezente:\n";
             foreach (var s in severeSymptoms)
             {
@@ -403,10 +394,8 @@ public class BabyController : MonoBehaviour
             }
             symptomsText.text = displayText;
 
-            // Afisam intrebarea
             questionText.text = "Cum tratezi bebelușul?";
 
-            // Setam actiuni pentru butoane
             if (incubatorButton != null)
                 incubatorButton.onClick.AddListener(PutInIncubator);
 
@@ -444,7 +433,6 @@ public class BabyController : MonoBehaviour
         Debug.Log("I s-a dat medicament bebelusului");
         babyDecisionManager.ChooseMedicine();
 
-        // ClosePanel();
     }
 
     private void DoNothing()
@@ -452,6 +440,5 @@ public class BabyController : MonoBehaviour
         Debug.Log("Nu s-a facut nimic");
         babyDecisionManager.ChooseNothing();
 
-        //ClosePanel();
     }
 }
